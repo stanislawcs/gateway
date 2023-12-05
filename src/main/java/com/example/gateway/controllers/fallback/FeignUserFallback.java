@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 public class FeignUserFallback implements FeignUser {
     @Override
-    public List<ListUserDTO> getAll() {
+    public List<ListUserDTO> getAll(Integer page, Integer usersPerPage) {
         return Collections.emptyList();
     }
 }
