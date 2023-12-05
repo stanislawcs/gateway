@@ -19,8 +19,8 @@ public class UserController {
     private final FeignUser feignUser;
 
     @GetMapping("/users")
-    public ResponseEntity<List<ListUserDTO>> getAll(@RequestParam(value = "page", required = false) Integer page,
-                                                    @RequestParam(value = "users-per-page", required = false) Integer usersPerPage) {
+    public ResponseEntity<List<ListUserDTO>> getAll(@RequestParam("page") Integer page,
+                                                    @RequestParam("users-per-page") Integer usersPerPage) {
         log.info("getAll");
         return new ResponseEntity<>(feignUser.getAll(page,usersPerPage), HttpStatus.OK);
     }
