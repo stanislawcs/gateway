@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+
+users:
+  host: http://localhost:7071
