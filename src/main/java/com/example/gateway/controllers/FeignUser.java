@@ -14,9 +14,9 @@ import java.util.List;
 public interface FeignUser {
 
     @GetMapping("/users")
-    List<ListUserDTO> getAll(@RequestParam("page") Integer page,
-                             @RequestParam("users-per-page") Integer usersPerPage);
+    List<ListUserDTO> getAll(@RequestParam(value = "page", required = false) Integer page,
+                             @RequestParam(value = "size", required = false) Integer size);
 
     @GetMapping("/users/{id}")
-    UserDTO getOneById(@PathVariable("id")Long id);
+    UserDTO getOneById(@PathVariable("id") Long id);
 }

@@ -19,15 +19,16 @@ public class UserController {
     private final FeignUser feignUser;
 
     @GetMapping
-    public ResponseEntity<List<ListUserDTO>> getAll(@RequestParam("page") Integer page,
-                                                    @RequestParam("users-per-page") Integer usersPerPage) {
-        log.info("getAll");
-        return new ResponseEntity<>(feignUser.getAll(page,usersPerPage), HttpStatus.OK);
+    public ResponseEntity<List<ListUserDTO>> getAll(@RequestParam(value = "page", required = false) Integer page,
+                                                    @RequestParam(value = "size", required = false) Integer size) {
+        log.info("UserController: getAll()");
+        return new ResponseEntity<>(feignUser.getAll(page, size), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getOneById(@PathVariable("id")Long id){
-        return new ResponseEntity<>(feignUser.getOneById(id),HttpStatus.OK);
+    public ResponseEntity<UserDTO> getOneById(@PathVariable("id") Long id) {
+        log.info("UserController: getOneById()");
+        return new ResponseEntity<>(feignUser.getOneById(id), HttpStatus.OK);
     }
 
 }
