@@ -1,6 +1,7 @@
 package com.example.gateway.controllers;
 
 import com.example.gateway.dto.ListUserDTO;
+import com.example.gateway.dto.UserCreationResponse;
 import com.example.gateway.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,4 +32,14 @@ public class UserController {
         return new ResponseEntity<>(feignUser.getOneById(id), HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<UserCreationResponse> create(@RequestBody UserDTO userDTO){
+        return new ResponseEntity<>(feignUser.create(userDTO),HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id){
+        feignUser.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
