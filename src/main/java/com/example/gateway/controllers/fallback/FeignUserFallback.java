@@ -29,6 +29,11 @@ public class FeignUserFallback implements FeignUser {
     }
 
     @Override
+    public void update(UserDTO userDTO, Long id) {
+        log.info("user not updated");
+    }
+
+    @Override
     public void delete(Long id) {
         log.info("User not deleted");
     }

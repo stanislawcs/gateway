@@ -33,12 +33,18 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserCreationResponse> create(@RequestBody UserDTO userDTO){
-        return new ResponseEntity<>(feignUser.create(userDTO),HttpStatus.CREATED);
+    public ResponseEntity<UserCreationResponse> create(@RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(feignUser.create(userDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+        feignUser.update(userDTO, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id){
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         feignUser.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

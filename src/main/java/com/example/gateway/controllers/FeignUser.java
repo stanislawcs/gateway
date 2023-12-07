@@ -24,6 +24,10 @@ public interface FeignUser {
     @PostMapping("/users")
     UserCreationResponse create(@RequestBody UserDTO userDTO);
 
+    @PutMapping("/users/{id}")
+    void update(@RequestBody UserDTO userDTO, @PathVariable("id") Long id);
+
     @DeleteMapping("/users/{id}")
     void delete(@PathVariable("id") Long id);
+
 }
