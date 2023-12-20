@@ -16,7 +16,8 @@ public interface FeignUser {
 
     @GetMapping("/users")
     List<ListUserDTO> getAll(@RequestParam(value = "page", required = false) Integer page,
-                             @RequestParam(value = "size", required = false) Integer size);
+                             @RequestParam(value = "size", required = false) Integer size,
+                             @RequestParam(value = "sort", required = false) String sort);
 
     @GetMapping("/users/{id}")
     UserDTO getOneById(@PathVariable("id") Long id);

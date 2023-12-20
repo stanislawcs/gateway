@@ -21,9 +21,10 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<ListUserDTO>> getAll(@RequestParam(value = "page", required = false) Integer page,
-                                                    @RequestParam(value = "size", required = false) Integer size) {
+                                                    @RequestParam(value = "size", required = false) Integer size,
+                                                    @RequestParam(value = "sort", required = false) String sort) {
         log.info("UserController: getAll()");
-        return new ResponseEntity<>(feignUser.getAll(page, size), HttpStatus.OK);
+        return new ResponseEntity<>(feignUser.getAll(page, size, sort), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
