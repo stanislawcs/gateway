@@ -3,6 +3,7 @@ package com.example.gateway.controllers;
 import com.example.gateway.dto.ListUserDto;
 import com.example.gateway.dto.UserCreationResponse;
 import com.example.gateway.dto.UserDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,12 +35,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserCreationResponse> create(@RequestBody UserDto userDTO) {
+    public ResponseEntity<UserCreationResponse> create(@RequestBody @Valid UserDto userDTO) {
         return new ResponseEntity<>(feignClientUser.create(userDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id, @RequestBody UserDto userDTO) {
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id, @RequestBody @Valid UserDto userDTO) {
         feignClientUser.update(userDTO, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
