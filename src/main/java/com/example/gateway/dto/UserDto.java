@@ -2,10 +2,12 @@ package com.example.gateway.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-public class UserDTO {
+@ToString
+public class UserDto {
     private Long id;
     private String username;
     private String email;

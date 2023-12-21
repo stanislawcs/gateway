@@ -3,6 +3,7 @@ package com.example.gateway.controllers;
 
 import com.example.gateway.dto.ExceptionResponse;
 import com.example.gateway.exceptions.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,24 +11,27 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice
 public class ExceptionHandlerController {
 
     @ExceptionHandler
     public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException e) {
+        log.error("UserNotFoundException was thrown with message: {}", e.getMessage());
         return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
 
     @ExceptionHandler
     public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException e) {
-
-        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        log.error("RuntimeException of type {} was thrown with message: {}", e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
     @ExceptionHandler
     public ResponseEntity<ExceptionResponse> handleValidationException(MethodArgumentNotValidException e) {
+        log.error("ValidationException was thrown with message: {}", e.getMessage());
 
         ExceptionResponse response = new ExceptionResponse();
         StringBuilder stringBuilder = new StringBuilder();
@@ -40,6 +44,12 @@ public class ExceptionHandlerController {
         });
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> handleException(Exception e) {
+        log.error("Exception of type: {} was thrown: {}", e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
