@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final FeignClientUser feignClientUser;
+    private final UserClient feignClientUser;
 
     @GetMapping
     public ResponseEntity<List<ListUserDto>> getAll(@RequestParam(value = "page", required = false) Integer page,

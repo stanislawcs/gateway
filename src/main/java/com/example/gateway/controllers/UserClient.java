@@ -11,7 +11,7 @@ import java.util.List;
 
 @Profile(value = "local")
 @FeignClient(value = "users", url = "${users.host}")
-public interface FeignClientUser {
+public interface UserClient {
 
     @GetMapping("/users")
     List<ListUserDto> getAll(@RequestParam(value = "page", required = false) Integer page,
