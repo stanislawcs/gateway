@@ -1,9 +1,14 @@
 spring:
+  profiles:
+    active: local
+---
+spring:
+  profile: local
+
   cloud:
     openfeign:
       circuitbreaker:
         enabled: true
-
 
 users:
   host: http://localhost:7071

@@ -1,11 +1,9 @@
 package com.example.gateway.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class ListUserDTO {
+@Data
+public class ListUserDto {
     private Long id;
     private String username;
     private String email;
