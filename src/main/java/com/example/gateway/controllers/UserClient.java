@@ -4,12 +4,10 @@ import com.example.gateway.dto.ListUserDto;
 import com.example.gateway.dto.UserCreationResponse;
 import com.example.gateway.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Profile(value = "local")
 @FeignClient(value = "users", url = "${users.host}")
 public interface UserClient {
 

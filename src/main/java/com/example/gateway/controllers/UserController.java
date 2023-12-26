@@ -18,36 +18,36 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserClient feignClientUser;
+    private final UserClient userClient;
 
     @GetMapping
     public ResponseEntity<List<ListUserDto>> getAll(@RequestParam(value = "page", required = false) Integer page,
                                                     @RequestParam(value = "size", required = false) Integer size,
                                                     @RequestParam(value = "sort", required = false) String sort) {
         log.info("UserController: getAll()");
-        return new ResponseEntity<>(feignClientUser.getAll(page, size, sort), HttpStatus.OK);
+        return new ResponseEntity<>(userClient.getAll(page, size, sort), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getOneById(@PathVariable("id") Long id) {
+    public ResponseEntity<UserDto> getById(@PathVariable("id") Long id) {
         log.info("UserController: getById()");
-        return new ResponseEntity<>(feignClientUser.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(userClient.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserCreationResponse> create(@RequestBody @Valid UserDto userDTO) {
-        return new ResponseEntity<>(feignClientUser.create(userDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(userClient.create(userDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id, @RequestBody @Valid UserDto userDTO) {
-        feignClientUser.update(userDTO, id);
+        userClient.update(userDTO, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        feignClientUser.delete(id);
+        userClient.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
