@@ -1,5 +1,6 @@
 package com.example.gateway.controllers;
 
+<<<<<<< HEAD
 import com.example.lib.dto.user.AuthenticationResponse;
 import com.example.lib.dto.user.UserDto;
 import com.example.lib.dto.user.UserReadAllDto;
@@ -19,7 +20,6 @@ public interface UserClient {
 
     @GetMapping("/users/{id}")
     UserResponse getById(@PathVariable("id") Long id);
-
 
     @PutMapping("/users/{id}")
     AuthenticationResponse update(@PathVariable("id") Long id, @RequestBody UserDto userDTO);

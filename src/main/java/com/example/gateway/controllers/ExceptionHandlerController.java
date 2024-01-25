@@ -1,6 +1,5 @@
 package com.example.gateway.controllers;
 
-
 import com.example.lib.dto.exceptions.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ public class ExceptionHandlerController {
         log.error("RuntimeException of type {} was thrown with message: {}", e.getClass().getSimpleName(), e.getMessage());
         return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
     @ExceptionHandler
     public ResponseEntity<ExceptionResponse> handleValidationException(MethodArgumentNotValidException e) {
