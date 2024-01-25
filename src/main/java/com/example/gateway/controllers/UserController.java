@@ -1,8 +1,8 @@
 package com.example.gateway.controllers;
 
-import com.example.gateway.dto.ListUserDto;
-import com.example.gateway.dto.UserCreationResponse;
-import com.example.gateway.dto.UserDto;
+import com.example.lib.dto.user.UserDto;
+import com.example.lib.dto.user.UserReadAllDto;
+import com.example.lib.dto.user.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,27 +21,22 @@ public class UserController {
     private final UserClient userClient;
 
     @GetMapping
-    public ResponseEntity<List<ListUserDto>> getAll(@RequestParam(value = "page", required = false) Integer page,
-                                                    @RequestParam(value = "size", required = false) Integer size,
-                                                    @RequestParam(value = "sort", required = false) String sort) {
+    public ResponseEntity<List<UserReadAllDto>> getAll(@RequestParam(value = "page", required = false) Integer page,
+                                                       @RequestParam(value = "size", required = false) Integer size,
+                                                       @RequestParam(value = "sort", required = false) String sort) {
         log.info("UserController: getAll()");
         return new ResponseEntity<>(userClient.getAll(page, size, sort), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<UserResponse> getById(@PathVariable("id") Long id) {
         log.info("UserController: getById()");
         return new ResponseEntity<>(userClient.getById(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<UserCreationResponse> create(@RequestBody @Valid UserDto userDTO) {
-        return new ResponseEntity<>(userClient.create(userDTO), HttpStatus.CREATED);
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id, @RequestBody @Valid UserDto userDTO) {
-        userClient.update(userDTO, id);
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id, @RequestBody @Valid UserDto dto) {
+        userClient.update(id, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

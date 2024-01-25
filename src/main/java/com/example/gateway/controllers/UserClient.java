@@ -1,8 +1,9 @@
 package com.example.gateway.controllers;
 
-import com.example.gateway.dto.ListUserDto;
-import com.example.gateway.dto.UserCreationResponse;
-import com.example.gateway.dto.UserDto;
+import com.example.lib.dto.user.AuthenticationResponse;
+import com.example.lib.dto.user.UserDto;
+import com.example.lib.dto.user.UserReadAllDto;
+import com.example.lib.dto.user.UserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,18 +13,16 @@ import java.util.List;
 public interface UserClient {
 
     @GetMapping("/users")
-    List<ListUserDto> getAll(@RequestParam(value = "page", required = false) Integer page,
-                             @RequestParam(value = "size", required = false) Integer size,
-                             @RequestParam(value = "sort", required = false) String sort);
+    List<UserReadAllDto> getAll(@RequestParam(value = "page", required = false) Integer page,
+                                @RequestParam(value = "size", required = false) Integer size,
+                                @RequestParam(value = "sort", required = false) String sort);
 
     @GetMapping("/users/{id}")
-    UserDto getById(@PathVariable("id") Long id);
+    UserResponse getById(@PathVariable("id") Long id);
 
-    @PostMapping("/users")
-    UserCreationResponse create(@RequestBody UserDto userDTO);
 
     @PutMapping("/users/{id}")
-    void update(@RequestBody UserDto userDTO, @PathVariable("id") Long id);
+    AuthenticationResponse update(@PathVariable("id") Long id, @RequestBody UserDto userDTO);
 
     @DeleteMapping("/users/{id}")
     void delete(@PathVariable("id") Long id);
