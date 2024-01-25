@@ -1,6 +1,5 @@
 package com.example.gateway.controllers;
 
-<<<<<<< HEAD
 import com.example.lib.dto.user.AuthenticationResponse;
 import com.example.lib.dto.user.UserDto;
 import com.example.lib.dto.user.UserReadAllDto;
