@@ -1,5 +1,6 @@
 package com.example.gateway.controllers;
 
+import com.example.gateway.clients.UserClient;
 import com.example.lib.dto.user.UserDto;
 import com.example.lib.dto.user.UserReadAllDto;
 import com.example.lib.dto.user.UserResponse;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.gateway.constants.Constants.AUTHORIZATION;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -23,26 +26,32 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserReadAllDto>> getAll(@RequestParam(value = "page", required = false) Integer page,
                                                        @RequestParam(value = "size", required = false) Integer size,
-                                                       @RequestParam(value = "sort", required = false) String sort) {
+                                                       @RequestParam(value = "sort", required = false) String sort,
+                                                       @RequestHeader(AUTHORIZATION) String authorizationHeader) {
         log.info("UserController: getAll()");
-        return new ResponseEntity<>(userClient.getAll(page, size, sort), HttpStatus.OK);
+        return new ResponseEntity<>(userClient.getAll(page, size, sort, authorizationHeader), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<UserResponse> getById(@PathVariable("id") Long id,
+                                                @RequestHeader(AUTHORIZATION) String authorizationHeader) {
         log.info("UserController: getById()");
-        return new ResponseEntity<>(userClient.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(userClient.getById(id, authorizationHeader), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id, @RequestBody @Valid UserDto dto) {
-        userClient.update(id, dto);
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") Long id,
+                                             @RequestBody @Valid UserDto dto,
+                                             @RequestHeader(AUTHORIZATION) String authorizationHeader) {
+        userClient.update(id, dto, authorizationHeader);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        userClient.delete(id);
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id,
+                                             @RequestHeader(AUTHORIZATION) String authorizationHeader) {
+        userClient.delete(id, authorizationHeader);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }
