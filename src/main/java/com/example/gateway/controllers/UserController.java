@@ -1,6 +1,6 @@
 package com.example.gateway.controllers;
 
-import com.example.gateway.clients.UserClient;
+import com.example.lib.client.UserClient;
 import com.example.lib.dto.user.UserDto;
 import com.example.lib.dto.user.UserReadAllDto;
 import com.example.lib.dto.user.UserResponse;

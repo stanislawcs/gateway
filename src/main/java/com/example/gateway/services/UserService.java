@@ -1,6 +1,5 @@
 package com.example.gateway.services;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -10,12 +9,7 @@ import java.util.List;
 public class UserService {
 
     public boolean canManipulateItem(List<String> authorities, String specificAuthority) {
-        for (String authority : authorities) {
-            if (specificAuthority.equalsIgnoreCase(authority))
-                return true;
-        }
-
-        return false;
+        return authorities.stream().anyMatch(specificAuthority::equalsIgnoreCase);
     }
 
     public List<String> splitAuthoritiesByDelimiter(String authorities) {

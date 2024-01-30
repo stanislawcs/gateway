@@ -1,17 +1,19 @@
 package com.example.gateway.controllers;
 
-import com.example.gateway.clients.ItemClient;
-import com.example.gateway.clients.UserClient;
 import com.example.gateway.exceptions.AccessDeniedException;
 import com.example.gateway.services.UserService;
+import com.example.lib.client.ItemClient;
+import com.example.lib.client.UserClient;
 import com.example.lib.dto.create.ItemCreationRequest;
 import com.example.lib.dto.create.ItemCreationResponse;
+import com.example.lib.dto.filter.ItemFilter;
 import com.example.lib.dto.read.ItemReadAllResponse;
 import com.example.lib.dto.update.ItemUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,44 +29,46 @@ public class ItemController {
     private final UserService userService;
 
     @GetMapping
-    public List<ItemReadAllResponse> findAll(@RequestParam(name = "page", defaultValue = "0", required = false) int page,
-                                             @RequestParam(name = "size", defaultValue = "15", required = false) int size,
-                                             @RequestParam(name = "sort", required = false) String sort,
-                                             @RequestParam(name = "sizes", required = false) String sizes,
-                                             @RequestParam(name = "colors", required = false) String colors,
-                                             @RequestParam(name = "brands", required = false) String brands,
-                                             @RequestParam(name = "price", required = false) BigDecimal price,
-                                             @RequestParam(name = "title", required = false) String title) {
-        return itemClient.findAll(page, size, sort, sizes, colors, brands, price, title);
+    public ResponseEntity<List<ItemReadAllResponse>> findAll(@RequestParam(value = "page", required = false) Integer page,
+                                                             @RequestParam(value = "size", required = false) Integer size,
+                                                             @RequestParam(value = "sort", required = false) String sort,
+                                                             ItemFilter filter) {
+        return new ResponseEntity<>(itemClient.findAll(page, size, sort, filter), HttpStatus.OK);
     }
 
     @PostMapping
-    public ItemCreationResponse create(@RequestHeader(AUTHORIZATION) String authorizationHeader,
-                                       @RequestBody ItemCreationRequest request) {
+    public ResponseEntity<ItemCreationResponse> create(@RequestHeader(AUTHORIZATION) String authorizationHeader,
+                                                       @RequestBody ItemCreationRequest request) {
         String authorities = userClient.getAuthorities(authorizationHeader);
-        if (userService.canManipulateItem(userService.splitAuthoritiesByDelimiter(authorities), CREATE_ITEM))
-            return itemClient.create(request);
+        if (userService.canManipulateItem(userService.splitAuthoritiesByDelimiter(authorities), CREATE_ITEM)) {
+            return new ResponseEntity<>(itemClient.create(request), HttpStatus.CREATED);
+        }
 
         throw new AccessDeniedException(ACCESS_DENIED);
     }
 
     @PutMapping("/{id}")
-    public void update(@RequestHeader(AUTHORIZATION) String authorizationHeader,
-                       @RequestBody ItemUpdateRequest request, @PathVariable("id") UUID id) {
+    public ResponseEntity<HttpStatus> update(@RequestHeader(AUTHORIZATION) String authorizationHeader,
+                                             @RequestBody ItemUpdateRequest request, @PathVariable("id") UUID id) {
         String authorities = userClient.getAuthorities(authorizationHeader);
-        if (userService.canManipulateItem(userService.splitAuthoritiesByDelimiter(authorities), UPDATE_ITEM))
+        if (userService.canManipulateItem(userService.splitAuthoritiesByDelimiter(authorities), UPDATE_ITEM)) {
             itemClient.update(request, id);
-        else
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
             throw new AccessDeniedException(ACCESS_DENIED);
+        }
+
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@RequestHeader(AUTHORIZATION) String authorizationHeader, @PathVariable("id") UUID id) {
+    public ResponseEntity<HttpStatus> delete(@RequestHeader(AUTHORIZATION) String authorizationHeader, @PathVariable("id") UUID id) {
         String authorities = userClient.getAuthorities(authorizationHeader);
-        if (userService.canManipulateItem(userService.splitAuthoritiesByDelimiter(authorities), DELETE_ITEM))
+        if (userService.canManipulateItem(userService.splitAuthoritiesByDelimiter(authorities), DELETE_ITEM)) {
             itemClient.delete(id);
-        else
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
             throw new AccessDeniedException(ACCESS_DENIED);
+        }
     }
 
 }
