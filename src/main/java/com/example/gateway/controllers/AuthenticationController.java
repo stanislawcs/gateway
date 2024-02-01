@@ -105,6 +105,7 @@ public class AuthenticationController {
                     )
             )
     )
+
     @PostMapping("/registration")
     public ResponseEntity<UserCreationResponse> register(@RequestBody UserDto dto) {
         return new ResponseEntity<>(userClient.register(dto), HttpStatus.CREATED);

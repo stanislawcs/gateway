@@ -205,7 +205,6 @@ public class UserController {
                             schema = @Schema(implementation = UserDto.class)
                     )
             )
-
     )
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@Parameter(name = "id", example = "1") @PathVariable("id") Long id,

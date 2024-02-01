@@ -1,5 +1,6 @@
 package com.example.gateway.exceptions;
 
+
 /**
  * Custom exception class representing access denied scenario.
  */
