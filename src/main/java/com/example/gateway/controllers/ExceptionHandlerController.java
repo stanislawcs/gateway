@@ -1,8 +1,8 @@
 package com.example.gateway.controllers;
 
-
-import com.example.gateway.dto.ExceptionResponse;
-import com.example.gateway.exceptions.UserNotFoundException;
+import com.example.gateway.exceptions.AccessDeniedException;
+import com.example.lib.dto.exceptions.ExceptionResponse;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +16,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionHandlerController {
 
     @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException e) {
-        log.error("UserNotFoundException was thrown with message: {}", e.getMessage());
-        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    }
-
-
-    @ExceptionHandler
     public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException e) {
         log.error("RuntimeException of type {} was thrown with message: {}", e.getClass().getSimpleName(), e.getMessage());
         return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
     @ExceptionHandler
     public ResponseEntity<ExceptionResponse> handleValidationException(MethodArgumentNotValidException e) {
@@ -49,6 +41,30 @@ public class ExceptionHandlerController {
     @ExceptionHandler
     public ResponseEntity<ExceptionResponse> handleException(Exception e) {
         log.error("Exception of type: {} was thrown: {}", e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> handleFeignExceptionUnauthorized(FeignException.Unauthorized e) {
+        log.error("FeignException: Unauthorized was thrown with message: {}", e.getMessage());
+        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> handleFeignExceptionForbidden(FeignException.Forbidden e) {
+        log.error("FeignException: Forbidden was thrown with message: {}", e.getMessage());
+        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.error("AccessDeniedException was thrown with message: {}", e.getMessage());
+        return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> handleFeignExceptionInternalServerError(FeignException.InternalServerError e) {
+        log.error("FeignException: InternalServerError was thrown with message: {}", e.getMessage());
         return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

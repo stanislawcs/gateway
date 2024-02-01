@@ -10,5 +10,6 @@ spring:
       circuitbreaker:
         enabled: true
 
-users:
-  host: http://localhost:7071
+url:
+  users: http://localhost:7071
+  items: http://localhost:7072
